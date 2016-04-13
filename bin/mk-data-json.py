@@ -26,8 +26,8 @@ if __name__ == '__main__':
     else:
         logging.basicConfig(level=logging.INFO)
 
-    countries = os.path.abspath(countries)
-    root = os.path.abspath(root)
+    countries = os.path.abspath(options.countries)
+    root = os.path.abspath(options.root)
 
     fh = open(countries, 'r')
     reader = csv.DictReader(fh)
@@ -61,11 +61,11 @@ if __name__ == '__main__':
         name = row['name']
 
         stats.append({
-            'wof:id': wofid,
-            'wof:name': name,
-            'wof:country': country.upper(),
+            'name': repo,
+            'description': "Who's On First postal code data for %s (%s)" % (name, country.upper()),
+            'url': remote,
             'count': count,
-            'url': remote
+
         })
 
     fh.close()
@@ -76,6 +76,6 @@ if __name__ == '__main__':
         out = os.path.abspath(options.out)
         fh = open(out, 'w')
 
-    json.dump(stats, fh)
+    json.dump(stats, fh, indent=2)
     sys.exit()
 

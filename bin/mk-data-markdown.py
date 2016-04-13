@@ -34,7 +34,10 @@ if __name__ == '__main__':
     codes = {}
 
     for s in stats:
-        codes[s['wof:country']] = s
+        name = s['name']
+        parts = name.split('-')
+        country = parts[-1]
+        codes[country] = s
 
     countries = codes.keys()
     countries.sort()
@@ -52,9 +55,9 @@ if __name__ == '__main__':
 
         details = codes[code]
 
-        fh.write("## [%s](https://whosonfirst.mapzen.com/spelunker/%s/) (%s)\n\n" % (details['wof:name'], details['wof:id'], code))
+        fh.write("## %s\n\n" % details['description'])
         
-        fh.write("* https://github.com/whosonfirst-data/whosonfirst-data-postalcode-%s\n" % code.lower())
+        fh.write("* %s\n" % details['url'])
 
         if details['count'] == '0':
             fh.write("* _0 postal codes_\n")
