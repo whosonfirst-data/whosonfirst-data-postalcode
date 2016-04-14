@@ -12,6 +12,10 @@ As of this writing _most_ of the postal codes with the exception of the [United 
 
 Details are included below but can be also referenced in human-readable and machine-readable forms through the [DATA.md](DATA.md) and [data.json](data.json) files.
 
+## License
+
+https://github.com/whosonfirst/whosonfirst-data/blob/master/LICENSE.md
+
 ## See also
 
 * https://whosonfirst.mapzen.com
