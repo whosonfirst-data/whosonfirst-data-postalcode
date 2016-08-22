@@ -14,7 +14,6 @@ if __name__ == '__main__':
     import optparse
     opt_parser = optparse.OptionParser()
 
-    opt_parser.add_option('-c', '--countries', dest='countries', action='store', default=None, help='')
     opt_parser.add_option('-r', '--root', dest='root', action='store', default=None, help='')
     opt_parser.add_option('-o', '--out', dest='out', action='store', default=None, help='')
 
@@ -26,29 +25,36 @@ if __name__ == '__main__':
     else:
         logging.basicConfig(level=logging.INFO)
 
-    countries = os.path.abspath(options.countries)
-    root = os.path.abspath(options.root)
+    whoami = sys.argv[0]
+    whoami = os.path.abspath(whoami)
 
-    fh = open(countries, 'r')
-    reader = csv.DictReader(fh)
+    bin = os.path.dirname(whoami)
+    parent = os.path.dirname(bin)
+    parent = os.path.basename(parent)
 
     stats = []
+    repos = []
 
-    for row in reader:
+    for (root, dirs, files) in os.walk(options.root):
 
-        country = row['wof_country']
-        country = country.lower()
+        for d in dirs:
 
-        if country == "":
-            continue
+            if d == parent:
+                continue
 
-        repo = "whosonfirst-data-postalcode-%s" % country
+            if d.startswith(parent):
+                repos.append(d)
+                
+        break
+
+    for repo in repos:
+
         local = os.path.join(root, repo)
 
         if not os.path.exists(local):
             continue
 
-        remote = "https://githubs.com/whosonfirst-data/%s" % repo
+        remote = "https://github.com/whosonfirst-data/%s" % repo
 
         count = 0
 
@@ -57,18 +63,19 @@ if __name__ == '__main__':
         for i in iter:
             count += 1
 
-        wofid = row['id']
-        name = row['name']
+        parts = repo.split("-")
+
+        placetype = parts[2]
+        country = parts[3]
+        region = " ".join(parts[4:])
 
         stats.append({
             'name': repo,
-            'description': "Who's On First postal code data for %s (%s)" % (name, country.upper()),
+            'description': "Who's On First %s data for %s (%s)" % (placetype, region.title(), country.upper()),
             'url': remote,
             'count': count,
 
         })
-
-    fh.close()
 
     fh = sys.stdout
 
