@@ -78,6 +78,6 @@ if __name__ == '__main__':
             fh.write("* one postal code\n")
         else:
             count = "{:,}".format(details['count'])
-            fh.write("* %s venues\n" % count)
+            fh.write("* %s postal codes\n" % count)
 
         fh.write("\n")
